@@ -503,7 +503,7 @@
             { 
                 name: "Agustin Arce", 
                 department: "Operador CC", 
-                img: "imagenes/boyblackhair.jpeg" 
+                img: "imagenes/boyblackhair(3).jpeg" 
             }
         ];
         
@@ -531,6 +531,14 @@
             }
         ];
         
+        // Nombre del operador que quieres que gane (debe coincidir exactamente con el nombre en el array 'operators')
+const fixedWinnerName = "Tamara Tanquia"; // <--- Cambia este nombre al que desees
+
+// Función para encontrar el índice del ganador fijo
+function getFixedWinnerIndex() {
+    return operators.findIndex(op => op.name === fixedWinnerName);
+}
+
         // Elementos del DOM
         const reel1 = document.getElementById('reel1');
         const reel2 = document.getElementById('reel2');
@@ -555,8 +563,19 @@
                 return;
             }
             const repeatCount = 10;
+            // Creamos una copia del array de operadores para cada reel
+            const operatorsForReel1 = [...operators];
+            const operatorsForReel2 = [...operators];
+            const operatorsForReel3 = [...operators];
+
+            // Mezclamos aleatoriamente las copias para que cada reel tenga un orden diferente
+            shuffleArray(operatorsForReel1);
+            shuffleArray(operatorsForReel2);
+            shuffleArray(operatorsForReel3);
+
             for (let r = 0; r < repeatCount; r++) {
-                operators.forEach(operator => {
+                // Reel 1
+                operatorsForReel1.forEach(operator => {
                     const operatorElement = document.createElement('div');
                     operatorElement.className = 'operator';
                     operatorElement.innerHTML = `
@@ -568,48 +587,105 @@
                             <div class="operator-dept">${operator.department}</div>
                         </div>
                     `;
-                    operatorElement.style.background = "#fff";
+                    operatorElement.style.background = "#0d0d1a";
                     reel1.appendChild(operatorElement.cloneNode(true));
+                });
+
+                // Reel 2
+                operatorsForReel2.forEach(operator => {
+                    const operatorElement = document.createElement('div');
+                    operatorElement.className = 'operator';
+                    operatorElement.innerHTML = `
+                        <div>
+                            <div class="operator-img">
+                                <img src="${operator.img}" alt="${operator.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                            </div>
+                            <div class="operator-name">${operator.name}</div>
+                            <div class="operator-dept">${operator.department}</div>
+                        </div>
+                    `;
+                    operatorElement.style.background = "#0d0d1a";
                     reel2.appendChild(operatorElement.cloneNode(true));
+                });
+
+                // Reel 3
+                operatorsForReel3.forEach(operator => {
+                    const operatorElement = document.createElement('div');
+                    operatorElement.className = 'operator';
+                    operatorElement.innerHTML = `
+                        <div>
+                            <div class="operator-img">
+                                <img src="${operator.img}" alt="${operator.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                            </div>
+                            <div class="operator-name">${operator.name}</div>
+                            <div class="operator-dept">${operator.department}</div>
+                        </div>
+                    `;
+                    operatorElement.style.background = "#0d0d1a";
                     reel3.appendChild(operatorElement.cloneNode(true));
                 });
             }
         }
-        
+
+        // Función auxiliar para mezclar un array (Algoritmo Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
         // Girar la ruleta
         function spin() {
             if (spinButton.disabled) return;
             spinButton.disabled = true;
             winnerName.textContent = "Seleccionando...";
             document.querySelectorAll('.confetti').forEach(el => el.remove());
+
+            // --- CAMBIO PRINCIPAL ---
+            // En lugar de elegir un ganador aleatorio, usamos el índice del ganador fijo
+            const winnerIndex = getFixedWinnerIndex();
+            if (winnerIndex === -1) {
+                console.error("El nombre del ganador fijo no se encontró en la lista de operadores:", fixedWinnerName);
+                winnerName.textContent = "Error: Ganador no encontrado";
+                spinButton.disabled = false;
+                return; // Salimos si el nombre no es válido
+            }
+            const winner = operators[winnerIndex];
+            // --- FIN DEL CAMBIO ---
+
             const spins = [
                 3 + Math.random() * 3,
                 3 + Math.random() * 3,
                 3 + Math.random() * 3
             ];
-            const winnerIndex = Math.floor(Math.random() * operators.length);
+            // Aseguramos que todas las ruletas se detengan en la misma posición (la del ganador)
             const finalPositions = [
                 -(spins[0] * operators.length * 270 + winnerIndex * 270),
                 -(spins[1] * operators.length * 270 + winnerIndex * 270),
                 -(spins[2] * operators.length * 270 + winnerIndex * 270)
             ];
-            // Usar transform en vez de top
+
             reel1.style.transition = `transform ${spins[0] * 0.5}s cubic-bezier(0.2, 0.8, 0.3, 1)`;
             reel2.style.transition = `transform ${spins[1] * 0.5 + 0.3}s cubic-bezier(0.2, 0.8, 0.3, 1)`;
             reel3.style.transition = `transform ${spins[2] * 0.5 + 0.6}s cubic-bezier(0.2, 0.8, 0.3, 1)`;
             reel1.style.transform = `translateY(${finalPositions[0]}px)`;
             reel2.style.transform = `translateY(${finalPositions[1]}px)`;
             reel3.style.transform = `translateY(${finalPositions[2]}px)`;
+
             setTimeout(() => {
                 reel1.style.transition = 'none';
                 reel2.style.transition = 'none';
                 reel3.style.transition = 'none';
+                // Nos aseguramos de que se detenga exactamente en la posición del ganador
                 reel1.style.transform = `translateY(${-winnerIndex * 270}px)`;
                 reel2.style.transform = `translateY(${-winnerIndex * 270}px)`;
                 reel3.style.transform = `translateY(${-winnerIndex * 270}px)`;
-                const winner = operators[winnerIndex];
+
+                // --- CAMBIO: Usamos el ganador predefinido ---
                 winnerName.textContent = winner.name;
                 updateDiploma(winner);
+                // --- FIN DEL CAMBIO ---
                 spinButton.disabled = false;
                 createConfetti();
             }, (spins[2] * 0.5 + 0.6) * 1000);
@@ -675,3 +751,4 @@
     </script>
 </body>
 </html>
+
