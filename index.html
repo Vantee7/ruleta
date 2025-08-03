@@ -371,8 +371,8 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-trophy"></i> Reconocimiento a Operadores de Contact Center</h1>
-            <p class="subtitle">Celebrando la excelencia en atención al cliente con nuestro programa semanal de reconocimiento</p>
+            <h1><i class="fas fa-trophy"></i> Reconocimiento al Talento Contact Center</h1>
+            <p class="subtitle">Un espacio para celebrar la dedicación y el trabajo bien hecho.</p>
         </header>
         <div class="main-content">
             <div class="slot-machine-container">
@@ -466,53 +466,24 @@
         // Datos de operadores con fotos reales
         const operators = [
             { 
-                name: "Florencia Beltrán", 
-                department: "B.O Asignación", 
-                img: "imagenes/shortblackhair_2.jpeg" 
+                name: "Marco Dobles", 
+                department: "Operador de Contact Center", 
+                img: "imagenes/marcodobles.jpeg" 
             },
             { 
-                name: "Juan Ingacio Garcia", 
-                department: "Team Leader B.O", 
-                img: "imagenes/boyblackhair.jpeg" 
+                name: "Solange Fernandez", 
+                department: "Operador de Contact Center", 
+                img: "imagenes/solangefernandez.jpeg" 
             },
             { 
-                name: "Tamara Tanquia", 
-                department: "B.O Asignación", 
-                img: "imagenes/red_hair.jpeg" 
+                name: "Matías Menabide", 
+                department: "Operador de Contact Center", 
+                img: "imagenes/matiasmenabide.jpeg" 
             },
-            { 
-                name: "Fabiela Valdez", 
-                department: "B.O Calidad", 
-                img: "imagenes/blackhair.jpeg" 
-            },
-            { 
-                name: "Juan Ferrace", 
-                department: "B.O Formación", 
-                img: "imagenes/boyblackhair.jpeg" 
-            },
-            { 
-                name: "Viviana Gallo", 
-                department: "B.O Asignación", 
-                img: "imagenes/blackhair_2.jpeg" 
-            },
-            { 
-                name: "Sonia Villegas", 
-                department: "Operador CC", 
-                img: "imagenes/blackhair.jpeg" 
-            },
-            { 
-                name: "Agustin Arce", 
-                department: "Operador CC", 
-                img: "imagenes/boyblackhair(3).jpeg" 
-            }
-        ];
         
+        ]; 
         // Frases motivacionales
         const quotes = [
-            {
-                text: "La mejor manera de cuidar el futuro es cuidar el momento presente.",
-                author: "Thich Nhat Hanh"
-            },
             {
                 text: "La excelencia nunca es un accidente. Siempre es el resultado de una alta intención, esfuerzo sincero y ejecución inteligente.",
                 author: "Aristóteles"
@@ -532,7 +503,7 @@
         ];
         
         // Nombre del operador que quieres que gane (debe coincidir exactamente con el nombre en el array 'operators')
-const fixedWinnerName = "Tamara Tanquia"; // <--- Cambia este nombre al que desees
+const fixedWinnerName = "Solange Fernandez"; // <--- Cambia este nombre al que desees
 
 // Función para encontrar el índice del ganador fijo
 function getFixedWinnerIndex() {
@@ -562,78 +533,70 @@ function getFixedWinnerIndex() {
                 reel3.innerHTML = '<div class="operator">Sin operadores</div>';
                 return;
             }
-            const repeatCount = 10;
-            // Creamos una copia del array de operadores para cada reel
-            const operatorsForReel1 = [...operators];
-            const operatorsForReel2 = [...operators];
-            const operatorsForReel3 = [...operators];
-
-            // Mezclamos aleatoriamente las copias para que cada reel tenga un orden diferente
-            shuffleArray(operatorsForReel1);
-            shuffleArray(operatorsForReel2);
-            shuffleArray(operatorsForReel3);
+            const repeatCount = 10; // cuántas veces se repite el ciclo de 3 operadores
 
             for (let r = 0; r < repeatCount; r++) {
-                // Reel 1
-                operatorsForReel1.forEach(operator => {
-                    const operatorElement = document.createElement('div');
-                    operatorElement.className = 'operator';
-                    operatorElement.innerHTML = `
-                        <div>
-                            <div class="operator-img">
-                                <img src="${operator.img}" alt="${operator.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
-                            </div>
-                            <div class="operator-name">${operator.name}</div>
-                            <div class="operator-dept">${operator.department}</div>
-                        </div>
-                    `;
-                    operatorElement.style.background = "#0d0d1a";
-                    reel1.appendChild(operatorElement.cloneNode(true));
-                });
+                // Creamos una permutación aleatoria de los operadores para cada fila
+                let indices = [0, 1, 2];
+                shuffleArray(indices);
 
-                // Reel 2
-                operatorsForReel2.forEach(operator => {
-                    const operatorElement = document.createElement('div');
-                    operatorElement.className = 'operator';
-                    operatorElement.innerHTML = `
+                // Para cada ruleta, agregamos el operador correspondiente de la permutación
+                for (let i = 0; i < 3; i++) {
+                    // Ruleta 1
+                    const op1 = operators[indices[i]];
+                    const el1 = document.createElement('div');
+                    el1.className = 'operator';
+                    el1.innerHTML = `
                         <div>
                             <div class="operator-img">
-                                <img src="${operator.img}" alt="${operator.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                                <img src="${op1.img}" alt="${op1.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
                             </div>
-                            <div class="operator-name">${operator.name}</div>
-                            <div class="operator-dept">${operator.department}</div>
+                            <div class="operator-name">${op1.name}</div>
+                            <div class="operator-dept">${op1.department}</div>
                         </div>
                     `;
-                    operatorElement.style.background = "#0d0d1a";
-                    reel2.appendChild(operatorElement.cloneNode(true));
-                });
+                    reel1.appendChild(el1);
 
-                // Reel 3
-                operatorsForReel3.forEach(operator => {
-                    const operatorElement = document.createElement('div');
-                    operatorElement.className = 'operator';
-                    operatorElement.innerHTML = `
+                    // Ruleta 2
+                    const op2 = operators[(indices[i] + 1) % 3];
+                    const el2 = document.createElement('div');
+                    el2.className = 'operator';
+                    el2.innerHTML = `
                         <div>
                             <div class="operator-img">
-                                <img src="${operator.img}" alt="${operator.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                                <img src="${op2.img}" alt="${op2.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
                             </div>
-                            <div class="operator-name">${operator.name}</div>
-                            <div class="operator-dept">${operator.department}</div>
+                            <div class="operator-name">${op2.name}</div>
+                            <div class="operator-dept">${op2.department}</div>
                         </div>
                     `;
-                    operatorElement.style.background = "#0d0d1a";
-                    reel3.appendChild(operatorElement.cloneNode(true));
-                });
+                    reel2.appendChild(el2);
+
+                    // Ruleta 3
+                    const op3 = operators[(indices[i] + 2) % 3];
+                    const el3 = document.createElement('div');
+                    el3.className = 'operator';
+                    el3.innerHTML = `
+                        <div>
+                            <div class="operator-img">
+                                <img src="${op3.img}" alt="${op3.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                            </div>
+                            <div class="operator-name">${op3.name}</div>
+                            <div class="operator-dept">${op3.department}</div>
+                        </div>
+                    `;
+                    reel3.appendChild(el3);
+                }
             }
         }
 
         // Función auxiliar para mezclar un array (Algoritmo Fisher-Yates)
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
         // Girar la ruleta
         function spin() {
@@ -751,4 +714,3 @@ function shuffleArray(array) {
     </script>
 </body>
 </html>
-
